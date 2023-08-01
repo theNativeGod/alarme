@@ -236,7 +236,7 @@ class TimeText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "${hour > 12 ? hour - 12 : hour == 0 ? 12 : hour} : $min    $meridian",
+        "${hour > 12 ? (hour - 12).toString().padLeft(2, '0') : hour == 0 ? 12 : hour.toString().padLeft(2, '0')} : ${min.toString().padLeft(2, '0')}}    $meridian",
         style: TextStyle(
             fontSize: 48.0,
             fontWeight: FontWeight.bold,
