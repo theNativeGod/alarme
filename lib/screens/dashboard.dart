@@ -4,16 +4,18 @@ import 'dart:math';
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 
-class ClockScreen extends StatefulWidget {
-  const ClockScreen({super.key});
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
 
   @override
-  State<ClockScreen> createState() => _ClockScreenState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
-class _ClockScreenState extends State<ClockScreen> {
+class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Timer? timer;
+  double adjustment = 136;
+  int index = 0;
 
   startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -39,13 +41,38 @@ class _ClockScreenState extends State<ClockScreen> {
     var dateTime = DateTime.now();
     var hour = dateTime.hour;
     var min = dateTime.minute;
-    var meridian = hour > 12 ? 'PM' : 'AM';
+
+    var meridian = hour >= 12 ? 'PM' : 'AM';
 
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.grey.shade300,
       drawer: Drawer(
-          backgroundColor: Colors.deepPurple.shade50, child: Container()),
+        child: Container(
+          color: Colors.grey.shade300,
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade500,
+                  offset: const Offset(3, 3),
+                  spreadRadius: 8,
+                  blurRadius: 12,
+                  inset: true,
+                ),
+                const BoxShadow(
+                  color: Colors.white70,
+                  offset: Offset(-3, -3),
+                  spreadRadius: 4,
+                  blurRadius: 12,
+                  inset: true,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       bottomNavigationBar: BottomAppBar(
         elevation: 3.0,
         padding: EdgeInsets.zero,
@@ -56,48 +83,52 @@ class _ClockScreenState extends State<ClockScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                height: 60,
-                width: (MediaQuery.of(context).size.width - 48) / 2,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: const Offset(3, 3),
-                      spreadRadius: 3,
-                      blurRadius: 6,
-                    ),
-                    const BoxShadow(
-                      color: Colors.white70,
-                      offset: Offset(-3, -3),
-                      spreadRadius: 3,
-                      blurRadius: 6,
-                    ),
-                  ],
+              InkWell(
+                onTap: () {
+                  index = 0;
+                  setState(() {});
+                },
+                child: BottomBarItemWidget(
+                  adjustment: adjustment,
+                  icon: Icon(Icons.home,
+                      color: index == 0 ? Colors.deepPurple : Colors.grey),
+                  isPressed: index == 0 ? true : false,
                 ),
               ),
-              Container(
-                height: 60,
-                width: (MediaQuery.of(context).size.width - 48) / 2,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: const Offset(3, 3),
-                      spreadRadius: 3,
-                      blurRadius: 6,
-                    ),
-                    const BoxShadow(
-                      color: Colors.white70,
-                      offset: Offset(-3, -3),
-                      spreadRadius: 3,
-                      blurRadius: 6,
-                    ),
-                  ],
+              InkWell(
+                onTap: () {
+                  index = 1;
+                  setState(() {});
+                },
+                child: BottomBarItemWidget(
+                  adjustment: adjustment,
+                  icon: Icon(Icons.alarm_add_rounded,
+                      color: index == 1 ? Colors.deepPurple : Colors.grey),
+                  isPressed: index == 1 ? true : false,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  index = 2;
+                  setState(() {});
+                },
+                child: BottomBarItemWidget(
+                  adjustment: adjustment,
+                  icon: Icon(Icons.hourglass_top_rounded,
+                      color: index == 2 ? Colors.deepPurple : Colors.grey),
+                  isPressed: index == 2 ? true : false,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  index = 3;
+                  setState(() {});
+                },
+                child: BottomBarItemWidget(
+                  adjustment: adjustment,
+                  icon: Icon(Icons.timer,
+                      color: index == 3 ? Colors.deepPurple : Colors.grey),
+                  isPressed: index == 3 ? true : false,
                 ),
               ),
             ],
@@ -136,6 +167,51 @@ class _ClockScreenState extends State<ClockScreen> {
   }
 }
 
+class BottomBarItemWidget extends StatelessWidget {
+  BottomBarItemWidget({
+    super.key,
+    required this.adjustment,
+    required this.icon,
+    required this.isPressed,
+  });
+
+  final double adjustment;
+  final Icon icon;
+  bool isPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      height: 60,
+      width: (MediaQuery.of(context).size.width - adjustment) / 4,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade500,
+            offset: const Offset(3, 3),
+            spreadRadius: 3,
+            blurRadius: 6,
+            inset: isPressed ? true : false,
+          ),
+          BoxShadow(
+            color: Colors.white70,
+            offset: Offset(-3, -3),
+            spreadRadius: 3,
+            blurRadius: 6,
+            inset: isPressed ? true : false,
+          ),
+        ],
+      ),
+      child: Center(
+        child: icon,
+      ),
+    );
+  }
+}
+
 class MenuIcon extends StatelessWidget {
   MenuIcon({
     super.key,
@@ -151,11 +227,11 @@ class MenuIcon extends StatelessWidget {
         BoxShadow(
             color: Colors.grey.shade500,
             offset: const Offset(3.0, 3.0),
-            blurRadius: 12,
+            blurRadius: 6,
             spreadRadius: 3),
         const BoxShadow(
             color: Colors.white70,
-            offset: Offset(-3.0, 3.0),
+            offset: Offset(-3.0, -3.0),
             blurRadius: 6,
             spreadRadius: 3),
       ],
@@ -173,20 +249,21 @@ class HeadingText extends StatelessWidget {
     return Text(
       "Alarme".toUpperCase(),
       style: TextStyle(
-          fontSize: 36.0,
-          fontWeight: FontWeight.w600,
+          letterSpacing: 5,
+          fontSize: 28.0,
+          fontWeight: FontWeight.bold,
           color: Colors.grey.shade300,
           shadows: [
             BoxShadow(
                 color: Colors.grey.shade500,
-                offset: const Offset(3.0, 3.0),
-                blurRadius: 12,
-                spreadRadius: 3),
+                offset: const Offset(1.5, 1.5),
+                blurRadius: 4,
+                spreadRadius: 2),
             const BoxShadow(
                 color: Colors.white70,
-                offset: Offset(-3.0, 3.0),
-                blurRadius: 6,
-                spreadRadius: 3),
+                offset: Offset(-1.5, -1.5),
+                blurRadius: 4,
+                spreadRadius: 2),
           ]),
     );
   }
@@ -213,7 +290,7 @@ class ClockAndTextWidget extends StatelessWidget {
         Center(
           child: CLockWidget(clockSize: clockSize),
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 56),
         TimeText(hour: hour, min: min, meridian: meridian),
       ],
     );
@@ -236,20 +313,21 @@ class TimeText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "${hour > 12 ? (hour - 12).toString().padLeft(2, '0') : hour == 0 ? 12 : hour.toString().padLeft(2, '0')} : ${min.toString().padLeft(2, '0')}}    $meridian",
+        "${hour > 12 ? (hour - 12).toString().padLeft(2, '0') : hour == 0 ? 12 : hour.toString().padLeft(2, '0')}:${min.toString().padLeft(2, '0')} $meridian",
         style: TextStyle(
+            letterSpacing: 5,
             fontSize: 48.0,
             fontWeight: FontWeight.bold,
             color: Colors.grey.shade300,
             shadows: [
               BoxShadow(
                   color: Colors.grey.shade500,
-                  offset: const Offset(3.0, 3.0),
+                  offset: const Offset(2.0, 2.0),
                   blurRadius: 12,
                   spreadRadius: 3),
               const BoxShadow(
                   color: Colors.white70,
-                  offset: Offset(-3.0, 3.0),
+                  offset: Offset(-2.0, -2.0),
                   blurRadius: 6,
                   spreadRadius: 3),
             ]),
@@ -297,23 +375,6 @@ class _CLockWidgetState extends State<CLockWidget> {
             ),
           ),
         ),
-        // Positioned.fill(
-        //   child: Transform.rotate(
-        //     angle: dateTime.second * 6 * pi / 180,
-        //     child: Container(
-        //       alignment: AlignmentDirectional(
-        //           dateTime.second * 6 * pi / 180 > 3 ? -0.1 : 0.1, 0.45),
-        //       child: Container(
-        //         height: 112,
-        //         width: 6,
-        //         decoration: BoxDecoration(
-        //           color: Colors.grey.shade400,
-        //           borderRadius: BorderRadius.circular(4),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
         Positioned.fill(
           child: Transform.rotate(
             angle: dateTime.second * 6 * pi / 180,
