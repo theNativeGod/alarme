@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Alarme',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.grey.shade300,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

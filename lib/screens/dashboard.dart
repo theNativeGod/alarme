@@ -227,7 +227,7 @@ class MenuIcon extends StatelessWidget {
         BoxShadow(
             color: Colors.grey.shade500,
             offset: const Offset(3.0, 3.0),
-            blurRadius: 6,
+            blurRadius: 2,
             spreadRadius: 3),
         const BoxShadow(
             color: Colors.white70,
@@ -257,7 +257,7 @@ class HeadingText extends StatelessWidget {
             BoxShadow(
                 color: Colors.grey.shade500,
                 offset: const Offset(1.5, 1.5),
-                blurRadius: 4,
+                blurRadius: 2,
                 spreadRadius: 2),
             const BoxShadow(
                 color: Colors.white70,
@@ -323,12 +323,12 @@ class TimeText extends StatelessWidget {
               BoxShadow(
                   color: Colors.grey.shade500,
                   offset: const Offset(2.0, 2.0),
-                  blurRadius: 12,
+                  blurRadius: 3,
                   spreadRadius: 3),
               const BoxShadow(
                   color: Colors.white70,
                   offset: Offset(-2.0, -2.0),
-                  blurRadius: 6,
+                  blurRadius: 3,
                   spreadRadius: 3),
             ]),
       ),
@@ -369,8 +369,9 @@ class _CLockWidgetState extends State<CLockWidget> {
               width: widget.clockSize.width - 16,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(150),
+                // border: Border.all(color: Colors.black),
                 color: Colors.grey.shade300,
-                boxShadow: innerShadow,
+                boxShadow: innerShadow
               ),
             ),
           ),
@@ -437,16 +438,17 @@ class _CLockWidgetState extends State<CLockWidget> {
     return [
       BoxShadow(
         color: Colors.grey.shade400,
-        offset: const Offset(3, 3),
-        spreadRadius: 6,
-        blurRadius: 12,
+        offset: const Offset(3
+        , 3),
+        spreadRadius: 3,
+        blurRadius: 3,
         inset: true,
       ),
-      const BoxShadow(
+       BoxShadow(
         color: Colors.white70,
         offset: Offset(-3, -3),
         spreadRadius: 3,
-        blurRadius: 6,
+        
         inset: true,
       ),
     ];
